@@ -24,7 +24,7 @@ const Hero = ({
   description = "Transform your resume with expertly crafted content using AI, Tailwind, and Shadcn UI. Copy and paste professional templates to stand out in your job search.",
   button = {
     text: "Import Resume",
-    url:'/'
+    url:'/upload'
   },
   imageSrc = "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg",
   imageAlt = "placeholder",

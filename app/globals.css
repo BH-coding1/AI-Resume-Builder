@@ -2,6 +2,17 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+.bg-gradient-patches {
+  background: linear-gradient(
+    135deg,
+    var(--primary-100) 0%,
+    var(--primary-300) 50%,
+    var(--primary-500) 100%
+  );
+  background-size: 400% 400%;
+ 
+}
+
 
 :root {
   --base-50: oklch(0.9843 0.0154 277.16);
@@ -161,11 +172,11 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
+  --color-chart-5: var(--primary-100);
+  --color-chart-4: var(--secondary-300);
+  --color-chart-3: var(--primary-300);
+  --color-chart-2: var(--secondary-50);
+  --color-chart-1: var(--primary-700);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -190,4 +201,23 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(to bottom, var(--primary-50), var(--primary-100));
+  background-attachment: fixed;
+  font-family: "Inter", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", sans-serif;
+}
+
+button {
+  font-family: "Poppins", sans-serif;
 }
