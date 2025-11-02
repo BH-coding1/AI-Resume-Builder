@@ -7,7 +7,7 @@ import FAQ from "@/components/faqSection";
 import Footer from "@/components/footer";
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
+    <div className="min-h-screen bg-white ">
       
       <Hero />
       <HowItWorks/>

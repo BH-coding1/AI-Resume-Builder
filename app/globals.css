@@ -3,17 +3,28 @@
 
 @custom-variant dark (&:is(.dark *));
 .bg-gradient-patches {
-  background: linear-gradient(
-    135deg,
-    var(--primary-100) 0%,
-    var(--primary-300) 50%,
-    var(--primary-500) 100%
-  );
-  background-size: 400% 400%;
- 
+  background:ghostwhite 
+              
+
 }
 
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
 
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 :root {
   --base-50: oklch(0.9843 0.0154 277.16);
   --base-100: oklch(0.967 0.0169 277.83);

@@ -56,7 +56,7 @@ const Hero = ({
   },
 }: Hero7Props) => {
   return (
-    <section className="py-32 mt-16  ">
+    <section className="py-45   ">
       <div className="container text-center pb-10">
         <div className="mx-auto flex max-w-6xl flex-col gap-6">
           <h1 className="text-3xl font-semibold lg:text-7xl">{heading}</h1>

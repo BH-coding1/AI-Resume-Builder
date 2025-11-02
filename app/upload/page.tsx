@@ -1,14 +1,14 @@
-import UploadForm from '@/components/upload'
+import UploadForm from "@/components/upload";
+import { Protect ,RedirectToSignIn} from "@clerk/nextjs";
 
 const uploadPage = () => {
   return (
-    <div className="min-h-screen bg-gray-50 bg-gradient-patches">
-  
-  
-    <UploadForm />
-  
-</div>
-  )
-}
+    <Protect  fallback={<RedirectToSignIn />}>
+      <div className="min-h-screen  bg-gradient-patches">
+        <UploadForm />
+      </div>
+    </Protect>
+  );
+};
 
-export default uploadPage
+export default uploadPage;

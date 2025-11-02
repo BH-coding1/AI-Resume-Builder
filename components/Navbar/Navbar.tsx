@@ -4,7 +4,8 @@ import { Brain, SunIcon } from "lucide-react";
 import { NavMenu } from "./nav-menu";
 import { NavigationSheet } from "./navigation-sheet";
 import { useState } from "react";
-import { SignUp, SignUpButton, SignInButton,SignedIn,SignedOut} from "@clerk/nextjs";
+import { SignUp, SignUpButton, SignInButton,SignedIn,SignedOut,SignOutButton} from "@clerk/nextjs";
+import Link from "next/link";
 
 const Navbar = () => {
   
@@ -24,7 +25,7 @@ const Navbar = () => {
       
           <div className="flex items-center gap-3">
             
-            <SignInButton mode="modal">
+            <SignInButton mode="modal" fallbackRedirectUrl={'/upload'}>
               <Button
                 variant="outline"
                 className="hidden sm:inline-flex rounded-full"
@@ -62,9 +63,15 @@ const Navbar = () => {
           
           
           <div className="flex items-center gap-3">
-            
+            <Link href='/'>
+            <SignOutButton>
+              <Button className="rounded-full w-full bg-white border border-primary-900 font-lg text-primary-700 hover:text-white ">Logout</Button>
+            </SignOutButton>
+            </Link>
+
+            <Link href='/upload'>
               <Button className="rounded-full w-full">Upload Resume</Button>
-            
+            </Link>
             {/* Mobile Menu */}
             <div className="md:hidden">
               
