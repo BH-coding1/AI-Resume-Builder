@@ -1,26 +1,43 @@
 "use client";
+
 import { useSearchParams } from "next/navigation";
 import { Protect, RedirectToSignIn } from "@clerk/nextjs";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Bot, Layout, Palette, Target, Zap } from "lucide-react";
+import { useResponse } from "@/app/context/ResponseContext";
+
 const AnalysisPage = () => {
   const searchParams = useSearchParams();
-  const pdfImage = searchParams.get("pdfImage");
-  const title = searchParams.get("title");
-  const atsScore = parseInt(searchParams.get("atsScore") || "0");
-  const companyname = searchParams.get("companyname") || "Company";
+  const pdfImage = searchParams?.get("pdfImage") || null;
+  const title = searchParams?.get("title") || "Position";
+  const companyname = searchParams?.get("companyname") || "Company";
 
-  // Dummy scores for other cards
-  const toneAndStyleScore = 85;
-  const structureScore = 78;
-  const skillsScore = 90;
+  // ✅ Get AI analysis from context
+  const { response } = useResponse();
 
-  // Dummy ATS improvements
-  const atsImprovements = [
-    "Add more job-specific keywords.",
-    "Avoid using tables or graphics.",
-    "Ensure consistent formatting.",
-  ];
+  if (!response) {
+    return (
+      <Protect fallback={<RedirectToSignIn />}>
+        <div className="flex flex-col items-center justify-center h-screen text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-3">
+            No Analysis Data Found
+          </h2>
+          <p className="text-gray-600 max-w-md">
+            Please upload your resume and generate a new analysis before
+            accessing this page.
+          </p>
+        </div>
+      </Protect>
+    );
+  }
+
+  
+  const toneScore = response.scores?.tone_score ?? 0;
+  const structureScore = response.scores?.structure_score ?? 0;
+  const skillsScore = response.scores?.skills_match_score ?? 0;
+  const atsScore = response.ats_score?.score ?? 0;
+  const justification = response.ats_score?.justification ?? "";
+  const atsImprovements = response.optimization_suggestions ?? [];
 
   return (
     <Protect fallback={<RedirectToSignIn />}>
@@ -37,9 +54,7 @@ const AnalysisPage = () => {
               <p className="text-center text-gray-600 text-lg mb-8">
                 AI-powered analysis tailored for{" "}
                 <span className="font-semibold text-primary">{title}</span> at{" "}
-                <span className="font-semibold text-primary">
-                  {companyname}
-                </span>
+                <span className="font-semibold text-primary">{companyname}</span>
               </p>
 
               {/* Overall Score Circle */}
@@ -98,36 +113,25 @@ const AnalysisPage = () => {
                     : "Significant improvements required"}
                 </p>
               </div>
+
+              {/* Justification */}
+              <p className="mt-4 text-center text-gray-600 italic">
+                {justification}
+              </p>
             </CardContent>
           </Card>
 
-          {/* Metric Cards Grid */}
+          {/* Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             {[
-              {
-                label: "Tone & Style",
-                score: toneAndStyleScore,
-                icon: <Palette className="w-5 h-5" />,
-              },
-              {
-                label: "Structure",
-                score: structureScore,
-                icon: <Layout className="w-5 h-5" />,
-              },
-              {
-                label: "Skills Match",
-                score: skillsScore,
-                icon: <Target className="w-5 h-5" />,
-              },
-              {
-                label: "ATS Score",
-                score: atsScore,
-                icon: <Bot className="w-5 h-5" />,
-              },
+              { label: "Tone & Style", score: toneScore, icon: <Palette /> },
+              { label: "Structure", score: structureScore, icon: <Layout /> },
+              { label: "Skills Match", score: skillsScore, icon: <Target /> },
+              { label: "ATS Score", score: atsScore, icon: <Bot /> },
             ].map((metric, idx) => (
               <Card
                 key={idx}
-                className="group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 p-0 overflow-hidden"
+                className="group bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
               >
                 <CardHeader className="pb-3 pt-5 px-5">
                   <div className="flex items-center justify-between mb-2">
@@ -135,7 +139,7 @@ const AnalysisPage = () => {
                       {metric.icon}
                     </div>
                     <span
-                      className={`text-xs font-medium px-2 py-0.5 rounded-full transition-colors ${
+                      className={`text-xs font-medium px-2 py-0.5 rounded-full ${
                         metric.score >= 80
                           ? "bg-emerald-100 text-emerald-700"
                           : metric.score >= 60
@@ -150,25 +154,20 @@ const AnalysisPage = () => {
                         : "Improve"}
                     </span>
                   </div>
-                  <CardTitle className="text-sm font-medium text-gray-700 tracking-tight">
+                  <CardTitle className="text-sm font-medium text-gray-700">
                     {metric.label}
                   </CardTitle>
                 </CardHeader>
-
                 <CardContent className="px-5 pb-5">
-                  <div className="flex items-baseline gap-1">
-                    <p className="text-3xl font-bold text-gray-900 tracking-tight">
-                      {metric.score}
-                    </p>
+                  <p className="text-3xl font-bold text-gray-900">
+                    {metric.score}
                     <span className="text-sm text-gray-500 font-medium">
                       /100
                     </span>
-                  </div>
-
-                  {/*Progress Bar */}
+                  </p>
                   <div className="mt-3 w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
                     <div
-                      className={`h-full rounded-full transition-all duration-700 ease-out ${
+                      className={`h-full rounded-full transition-all duration-700 ${
                         metric.score >= 80
                           ? "bg-emerald-500"
                           : metric.score >= 60
@@ -184,7 +183,7 @@ const AnalysisPage = () => {
           </div>
 
           {/* ATS Improvements */}
-          <Card className="bg-white rounded-xl  border-gray-400 shadow-sm p-6 mb-10 ">
+          <Card className="bg-white rounded-xl border-gray-400 shadow-sm p-6 mb-10">
             <CardHeader>
               <CardTitle className="text-xl font-bold text-gray-900">
                 ATS Optimization Suggestions
@@ -192,7 +191,7 @@ const AnalysisPage = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {atsImprovements.map((improvement, index) => (
+                {atsImprovements.map((improvement:string, index:number) => (
                   <div
                     key={index}
                     className="flex items-start p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border border-amber-200 group hover:from-amber-100 hover:to-orange-100 transition-all"
@@ -207,39 +206,35 @@ const AnalysisPage = () => {
             </CardContent>
           </Card>
 
-          {/* AI Fix Button */}
-          <div className="text-center mb-10">
-            <button className="group  items-center cursor-pointer justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-indigo-600 to-primary-900 rounded-full shadow-xl hover:shadow-2xl transform duration-300 overflow-hidden">
-              <span className=" flex items-center">
-                <Zap />
-                AI Fix My Resume
-              </span>
-            </button>
-          </div>
-
           {/* Resume Preview */}
-          <Card className="bg-white  border border-gray-200 pt-0">
-            <CardHeader className="bg-primary-900   p-5 text-white">
+          <Card className="bg-white border border-gray-200">
+            <CardHeader className="bg-primary-900 p-5 text-white">
               <CardTitle className="text-xl font-bold">
                 Resume Preview: {companyname} - {title}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6 bg-gray-50">
-              <div className="bg-white rounded-lg  p-4 border-2 border-dashed border-gray-300">
-                <img
-                  src={pdfImage || ""}
-                  alt="Resume Preview"
-                  className="w-full h-auto rounded-md shadow-md hover:shadow-lg transition-shadow duration-300"
-                />
+              <div className="bg-white rounded-lg p-4 border-2 border-dashed border-gray-300">
+                {pdfImage ? (
+                  <img
+                    src={pdfImage}
+                    alt="Resume Preview"
+                    className="w-full h-auto rounded-md shadow-md hover:shadow-lg transition-shadow duration-300"
+                  />
+                ) : (
+                  <p className="text-center text-gray-500">
+                    No preview available.
+                  </p>
+                )}
               </div>
             </CardContent>
           </Card>
 
-          {/* Footer Note */}
+          {/* Footer */}
           <div className="mt-12 text-center text-sm text-gray-500">
             <p>
               Analysis powered by{" "}
-              <span className="font-semibold text-indigo-600">ResuBuild</span>
+              <span className="font-semibold text-indigo-600">RefineAi</span>
             </p>
           </div>
         </div>

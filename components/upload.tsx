@@ -9,6 +9,7 @@ import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { convertPdfToImage } from "@/lib/pdfToImage";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
+import { useResponse } from "@/app/context/ResponseContext";
 import {
   Field,
   FieldDescription,
@@ -45,7 +46,7 @@ const UploadForm = () => {
       jobTitle: "",
     },
   });
-
+  const {setResponse} = useResponse()
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusText, setStatusText] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -66,12 +67,32 @@ const UploadForm = () => {
       setIsProcessing(true);
       setStatusText("Uploading the file...");
 
-      // Simulate file upload
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Prepare the form data to send to the backend API
+      const formData = new FormData();
+      formData.append("companyName", companyName);
+      formData.append("jobTitle", jobTitle);
+      formData.append("description", description);
+      formData.append("file", file);
+
+      // Send the data to the backend API
+      const response = await fetch("/api/webhook", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`API request failed with status ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log('content',result.result[0].message.content)
+      setResponse(result.result[0].message.content)
+      console.log("API response:", result);
 
       setStatusText("Analyzing the resume...");
       const imageFile = await convertPdfToImage(file);
-       console.log("Converted image file:", imageFile); 
+      console.log("Converted image file:", imageFile);
+
       if (!imageFile.file) {
         setStatusText("No images generated from PDF.");
         await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -87,13 +108,12 @@ const UploadForm = () => {
         pdfImage: imageFile.imageUrl,
         title: jobTitle,
         atsScore: Math.floor(Math.random() * 100),
-        companyname:companyName, 
+        companyname: companyName,
       };
 
       setStatusText("Analysis complete!");
       toast.success("Analysis completed successfully!");
 
-      
       router.push(
         `/analysis?pdfImage=${encodeURIComponent(
           analysisResults.pdfImage

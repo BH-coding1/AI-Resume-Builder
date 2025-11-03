@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Navbar from "@/components/HomeNavbar/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
-import { dark, neobrutalism, shadesOfPurple } from '@clerk/themes'
+import { ResponseProvider } from "../context/ResponseContext";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -40,7 +40,10 @@ export default function RootLayout({
       <body 
       >
         <Navbar/>
-        {children}
+        <ResponseProvider>
+          {children}
+        </ResponseProvider>
+        
       </body>
     </html>
     </ClerkProvider>
