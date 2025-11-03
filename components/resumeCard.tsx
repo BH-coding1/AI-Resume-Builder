@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Building2, FileText } from "lucide-react";
+import { Building2 } from "lucide-react";
 
 interface ResumeCardProps {
   title: string;
@@ -11,39 +11,44 @@ interface ResumeCardProps {
 }
 
 export default function ResumeCard({ title, companyName, atsScore, imageUrl }: ResumeCardProps) {
-  const scoreColor = atsScore >= 80 ? "bg-green-500" : atsScore >= 60 ? "bg-yellow-500" : "bg-red-500";
-
   return (
-    <Card className="overflow-hidden border hover:shadow-sm transition-shadow duration-200">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between gap-3">
-          <div className="space-y-1">
-            <CardTitle className="text-lg font-medium leading-tight">{title}</CardTitle>
-            <CardDescription className="flex items-center gap-1.5 text-sm">
-              <Building2 className="h-3.5 w-3.5" />
-              {companyName}
-            </CardDescription>
-          </div>
-          <Badge variant={"default" } className="text-xs">
-            {atsScore}%
-          </Badge>
+    <Card className="overflow-hidden border border-gray-200 hover:border-gray-300 transition-all duration-300 rounded-2xl bg-white shadow-sm hover:shadow-md">
+      {/* Header */}
+      <CardHeader className="pb-2 pt-5 px-5 flex items-start justify-between">
+        <div className="space-y-1">
+          <CardTitle className="text-base font-semibold text-gray-900">
+            {title}
+          </CardTitle>
+          <CardDescription className="flex items-center gap-1.5 text-sm text-gray-500">
+            <Building2 className="h-4 w-4 text-gray-400" />
+            {companyName}
+          </CardDescription>
         </div>
+
+        <Badge
+          className="bg-primary text-white px-3 py-1 text-xs font-medium rounded-full shadow-sm"
+        >
+          {atsScore}%
+        </Badge>
       </CardHeader>
 
-      <CardContent className="space-y-4 pt-0">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span className="font-medium">ATS Score</span>
-            <span>{atsScore} / 100</span>
+      {/* Content */}
+      <CardContent className="space-y-5 pt-3 px-5 pb-6">
+        {/* Progress */}
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            <span>ATS Score</span>
+            <span className="font-medium text-gray-700">{atsScore}/100</span>
           </div>
-          <Progress value={atsScore} className="h-1.5" />
+          <Progress value={atsScore} className="h-1.5 bg-gray-100" />
         </div>
 
-        <div className="aspect-[8.5/11] w-full overflow-hidden rounded-md border bg-gray-50">
+        {/* Image */}
+        <div className="aspect-[8.5/11] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
           <img
             src={imageUrl}
             alt={`Resume preview for ${title}`}
-            className="h-full w-full object-cover object-top"
+            className="max-h-5xl w-full object-cover object-top transition-transform duration-300 hover:scale-[1.01]"
           />
         </div>
       </CardContent>

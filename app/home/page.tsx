@@ -18,7 +18,7 @@ const Homepage = () => {
             title="Software Engineer Resume"
             companyName="TechCorp Inc."
             atsScore={85}
-            imageUrl="https://via.placeholder.com/400x300" // Replace with actual image URL
+            imageUrl="https://via.placeholder.com/400x300" 
           />
         </div>
       </div>
