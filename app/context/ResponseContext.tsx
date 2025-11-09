@@ -47,12 +47,27 @@ export const ResponseProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (response) {
       localStorage.setItem("resumeResponse", JSON.stringify(response));
+      saveToBackend(response);
     }
   }, [response]);
 
+  const saveToBackend = async (data: ResponseData) => {
+    try {
+      const res = await fetch("/api/resumes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      if (!result.success) throw new Error(result.error || "Failed to save resume");
+      console.log("✅ Saved to backend:", result.resume);
+    } catch (err) {
+      console.error("❌ Failed to save resume:", err);
+    }
+  };
+
   const setResponse = (data: ResponseData) => {
     setResponseState(data);
-    console.log("🔹 New response saved:", data);
   };
 
   const clearResponse = () => {
@@ -66,7 +81,6 @@ export const ResponseProvider = ({ children }: { children: ReactNode }) => {
     </ResponseContext.Provider>
   );
 };
-
 
 export const useResponse = () => {
   const context = useContext(ResponseContext);

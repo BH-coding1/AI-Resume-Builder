@@ -46,7 +46,7 @@ const UploadForm = () => {
       jobTitle: "",
     },
   });
-  const {setResponse} = useResponse()
+  const { setResponse } = useResponse();
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusText, setStatusText] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -83,12 +83,12 @@ const UploadForm = () => {
       if (!response.ok) {
         throw new Error(`API request failed with status ${response.status}`);
       }
-      
+
       const result = await response.json();
-      console.log('content',result.result[0].message.content)
-      
+      console.log("content", result.result[0].message.content);
+
       console.log("API response:", result);
-      
+
       setStatusText("Analyzing the resume...");
       const imageFile = await convertPdfToImage(file);
       console.log("Converted image file:", imageFile);
@@ -110,7 +110,27 @@ const UploadForm = () => {
         atsScore: Math.floor(Math.random() * 100),
         companyname: companyName,
       };
-      setResponse(result.result[0].message.content)
+      // setting the response context
+
+      setResponse({
+        pdfUrl: imageFile.imageUrl, //include the PDF image
+        scores: {
+          tone_score: result.result[0].message.content.scores?.tone_score || 0,
+          structure_score:
+            result.result[0].message.content.scores?.structure_score || 0,
+          skills_match_score:
+            result.result[0].message.content.scores?.skills_match_score || 0,
+        },
+        ats_score: {
+          score: result.result[0].message.content.ats_score?.score || 0,
+          justification:
+            result.result[0].message.content.ats_score?.justification || "",
+        },
+        resume_analysis: result.result[0].message.content.resume_analysis || [],
+        optimization_suggestions:
+          result.result[0].message.content.optimization_suggestions || [],
+      });
+
       setStatusText("Analysis complete!");
       toast.success("Analysis completed successfully!");
 
