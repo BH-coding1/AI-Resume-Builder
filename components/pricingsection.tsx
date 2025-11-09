@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/lib/utils";
 import { CircleCheck } from "lucide-react";
 
 const plans = [
@@ -50,7 +50,10 @@ const plans = [
 
 const Pricing = () => {
   return (
-    <div id='pricing' className="min-h-screen bg-white pb-30 pt-20 mx-5 rounded-2xl text-gray-900 flex mb-20 mt-35 flex-col items-center justify-center py-12 px-6">
+    <div
+      id="pricing"
+      className="min-h-screen bg-white pb-30 pt-20 mx-5 rounded-2xl text-gray-900 flex mb-20 mt-35 flex-col items-center justify-center py-12 px-6"
+    >
       <h1 className="text-5xl sm:text-6xl font-semibold text-center tracking-tighter">
         Pricing Plans
       </h1>

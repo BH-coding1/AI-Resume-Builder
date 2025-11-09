@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation"; // For navigation
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { convertPdfToImage } from "@/lib/pdfToImage";
+import { convertPdfToImage } from "@/app/lib/pdfToImage";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 import { useResponse } from "@/app/context/ResponseContext";
 import {
@@ -86,9 +86,9 @@ const UploadForm = () => {
       
       const result = await response.json();
       console.log('content',result.result[0].message.content)
-      setResponse(result.result[0].message.content)
+      
       console.log("API response:", result);
-
+      
       setStatusText("Analyzing the resume...");
       const imageFile = await convertPdfToImage(file);
       console.log("Converted image file:", imageFile);
@@ -110,7 +110,7 @@ const UploadForm = () => {
         atsScore: Math.floor(Math.random() * 100),
         companyname: companyName,
       };
-
+      setResponse(result.result[0].message.content)
       setStatusText("Analysis complete!");
       toast.success("Analysis completed successfully!");
 

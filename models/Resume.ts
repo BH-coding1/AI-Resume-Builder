@@ -2,10 +2,8 @@ import mongoose from "mongoose";
 
 const ResumeSchema = new mongoose.Schema(
   {
-    pdfUrl: {
-      type: String, 
-      required: true,
-    },
+    pdfUrl: { type: String, required: true },
+    userId: { type: String, required: true },
     scores: {
       tone_score: { type: Number, default: 0 },
       structure_score: { type: Number, default: 0 },
@@ -15,14 +13,8 @@ const ResumeSchema = new mongoose.Schema(
       score: { type: Number, default: 0 },
       justification: { type: String, default: "" },
     },
-    resume_analysis: {
-      type: [String],
-      default: [],
-    },
-    optimization_suggestions: {
-      type: [String],
-      default: [],
-    },
+    resume_analysis: { type: [String], default: [] },
+    optimization_suggestions: { type: [String], default: [] },
   },
   { timestamps: true }
 );

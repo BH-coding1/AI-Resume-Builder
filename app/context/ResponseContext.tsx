@@ -13,6 +13,7 @@ interface AtsScore {
 }
 
 interface ResponseData {
+  pdfUrl: string;
   scores: Scores;
   ats_score: AtsScore;
   resume_analysis: string[];
