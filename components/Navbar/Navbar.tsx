@@ -34,7 +34,7 @@ const Navbar = () => {
               </Button>
             </SignInButton>
             
-            <SignUpButton mode="modal" fallbackRedirectUrl={'/upload'}>
+            <SignUpButton mode="modal" fallbackRedirectUrl={'/upload'} >
               <Button className="rounded-full">Get Started</Button>
             </SignUpButton>
             

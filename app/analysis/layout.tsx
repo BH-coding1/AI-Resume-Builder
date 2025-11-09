@@ -25,7 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider
+    
+    <html lang="en"><ClerkProvider
     appearance={{
        signIn: {
           
@@ -36,7 +37,6 @@ export default function RootLayout({
           variables: { colorPrimary: 'purple' },
         },
       }}>
-    <html lang="en">
       <body 
       >
         <Navbar/>
@@ -44,8 +44,8 @@ export default function RootLayout({
           {children}
         </ResponseProvider>
         
-      </body>
+      </body></ClerkProvider>
     </html>
-    </ClerkProvider>
+    
   );
 }

@@ -1,11 +1,30 @@
-import mongoose, { Schema, models } from "mongoose";
+import mongoose from "mongoose";
 
-const resumeSchema = new Schema({
-  userId: { type: String, ref: "User", required: true },
-  atsScore: Number,
-  resumeAnalysis: [String],
-  optimizationSuggestions: [String],
-  createdAt: { type: Date, default: Date.now },
-});
+const ResumeSchema = new mongoose.Schema(
+  {
+    pdfUrl: {
+      type: String, 
+      required: true,
+    },
+    scores: {
+      tone_score: { type: Number, default: 0 },
+      structure_score: { type: Number, default: 0 },
+      skills_match_score: { type: Number, default: 0 },
+    },
+    ats_score: {
+      score: { type: Number, default: 0 },
+      justification: { type: String, default: "" },
+    },
+    resume_analysis: {
+      type: [String],
+      default: [],
+    },
+    optimization_suggestions: {
+      type: [String],
+      default: [],
+    },
+  },
+  { timestamps: true }
+);
 
-export default models.Resume || mongoose.model("Resume", resumeSchema);
+export default mongoose.models.Resume || mongoose.model("Resume", ResumeSchema);

@@ -75,7 +75,7 @@ const UploadForm = () => {
       formData.append("file", file);
 
       // Send the data to the backend API
-      const response = await fetch("/api/webhook", {
+      const response = await fetch("/api/webhooks/analysis", {
         method: "POST",
         body: formData,
       });
