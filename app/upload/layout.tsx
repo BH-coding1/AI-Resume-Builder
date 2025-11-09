@@ -26,21 +26,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <ClerkProvider
-        appearance={{
-          signIn: {
-            variables: { colorPrimary: "purple" },
-          },
-          signUp: {
-            variables: { colorPrimary: "purple" },
-          },
-        }}
-      >
-        <body>
+      <body>
+        <ClerkProvider
+          appearance={{
+            signIn: {
+              variables: { colorPrimary: "purple" },
+            },
+            signUp: {
+              variables: { colorPrimary: "purple" },
+            },
+          }}
+        >
           <Navbar />
           <ResponseProvider>{children}</ResponseProvider>
-        </body>
-      </ClerkProvider>
+        </ClerkProvider>
+      </body>
     </html>
   );
 }

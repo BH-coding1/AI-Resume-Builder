@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
-import { dark, neobrutalism, shadesOfPurple } from '@clerk/themes'
+import { dark, neobrutalism, shadesOfPurple } from "@clerk/themes";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -25,27 +25,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-   
-    <html lang="en"> 
-    <ClerkProvider
-    appearance={{
-       signIn: {
-          
-          variables: { colorPrimary: 'purple' },
-        },
-         signUp: {
-          
-          variables: { colorPrimary: 'purple' },
-        },
-      }}>
-      <body 
-      
-      >
-        <Navbar/>
-        {children}
-      </body> 
-      </ClerkProvider>
+    <html lang="en">
+      <body>
+        {" "}
+        <ClerkProvider
+          appearance={{
+            signIn: {
+              variables: { colorPrimary: "purple" },
+            },
+            signUp: {
+              variables: { colorPrimary: "purple" },
+            },
+          }}
+        >
+          <Navbar />
+          {children}
+        </ClerkProvider>
+      </body>
     </html>
-   
   );
 }

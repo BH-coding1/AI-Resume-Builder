@@ -25,27 +25,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    
-    <html lang="en"><ClerkProvider
-    appearance={{
-       signIn: {
-          
-          variables: { colorPrimary: 'purple' },
-        },
-         signUp: {
-          
-          variables: { colorPrimary: 'purple' },
-        },
-      }}>
-      <body 
-      >
-        <Navbar/>
-        <ResponseProvider>
-          {children}
-        </ResponseProvider>
-        
-      </body></ClerkProvider>
+    <html lang="en">
+      <body>
+        <ClerkProvider
+          appearance={{
+            signIn: {
+              variables: { colorPrimary: "purple" },
+            },
+            signUp: {
+              variables: { colorPrimary: "purple" },
+            },
+          }}
+        >
+          <Navbar />
+          <ResponseProvider>{children}</ResponseProvider>
+        </ClerkProvider>
+      </body>
     </html>
-    
   );
 }
