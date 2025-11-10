@@ -13,6 +13,12 @@ const ResumeSchema = new mongoose.Schema(
       score: { type: Number, default: 0 },
       justification: { type: String, default: "" },
     },
+    companyName:{
+      type:String,
+    },
+    jobTitle:{
+      type:String,
+    },
     resume_analysis: { type: [String], default: [] },
     optimization_suggestions: { type: [String], default: [] },
   },
