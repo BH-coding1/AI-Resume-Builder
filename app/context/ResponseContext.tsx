@@ -16,6 +16,8 @@ interface ResponseData {
   pdfUrl: string;
   scores: Scores;
   ats_score: AtsScore;
+  companyName:string;
+  jobTitle:string;
   resume_analysis: string[];
   optimization_suggestions: string[];
 }
