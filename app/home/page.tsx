@@ -1,7 +1,10 @@
+'use client'; // Required for useEffect, useState
+
 import ResumeCard from "@/components/resumeCard";
 import { Protect, RedirectToSignIn } from "@clerk/nextjs";
+import { useState, useEffect } from "react";
 
-// Define interfaces
+// === Types ===
 interface Scores {
   tone_score: number;
   structure_score: number;
@@ -18,16 +21,16 @@ interface ResponseData {
   scores: Scores;
   ats_score: AtsScore;
   resume_analysis: string[];
-  companyName:string;
-  jobTitle:string;
+  companyName: string;
+  jobTitle: string;
   optimization_suggestions: string[];
 }
 
-// Mark as async server component
+
 async function fetchResumes(): Promise<ResponseData[]> {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/webhooks/analysis`, {
+  const response = await fetch(`/api/resumes`, {
     method: "GET",
-    cache: "no-store", // or use revalidate if needed
+    credentials: "include", 
   });
 
   if (!response.ok) {
@@ -37,31 +40,56 @@ async function fetchResumes(): Promise<ResponseData[]> {
   return response.json();
 }
 
-const Homepage = async () => {
-  let resumes: ResponseData[] = [];
 
-  try {
-    resumes = await fetchResumes();
-  } catch (error) {
-    console.error("Error fetching resumes:", error);
-  }
+const Homepage = () => {
+  const [resumes, setResumes] = useState<ResponseData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadResumes = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchResumes();
+        setResumes(data);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching resumes:", err);
+        setError("Failed to load resumes. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadResumes();
+  }, []); 
 
   return (
     <Protect fallback={<RedirectToSignIn />}>
       <div className="py-30 bg-gray-50 min-h-screen px-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {resumes.length > 0 ? (
+          {loading ? (
+            <div className="col-span-full text-center py-10">
+              <p className="text-gray-600">Loading your resumes...</p>
+            </div>
+          ) : error ? (
+            <div className="col-span-full text-center py-10">
+              <p className="text-red-600">{error}</p>
+            </div>
+          ) : resumes.length > 0 ? (
             resumes.map((resume, index) => (
               <ResumeCard
-                key={resume.pdfUrl || index} 
-                title="Software Engineer Resume"
-                companyName="TechCorp Inc."
+                key={index}
+                title={resume.jobTitle}
+                companyName={resume.companyName}
                 atsScore={resume.ats_score.score}
-                imageUrl={resume.pdfUrl}
+                imageUrl='https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.beamjobs.com%2Fresumes%2Fit-resume-examples&psig=AOvVaw1sT4FjKWLxaviNJIIO0y65&ust=1762888430293000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCJiLjrGl6JADFQAAAAAdAAAAABAK'
               />
             ))
           ) : (
-            <p>No resumes found.</p>
+            <div className="col-span-full text-center py-10">
+              <p className="text-gray-600">No resumes found.</p>
+            </div>
           )}
         </div>
       </div>
