@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <div className=" bg-muted">
       <SignedOut>
-      <nav className="fixed top-6 inset-x-4 h-16 bg-background border dark:border-slate-700/70 max-w-(--breakpoint-xl) mx-auto rounded-full">
+      <nav className="fixed top-6 overflow-hidden inset-x-4 h-16 bg-background border dark:border-slate-700/70 max-w-(--breakpoint-xl) mx-auto rounded-full">
         <div className="h-full flex items-center justify-between mx-auto px-4">
           <div className="flex gap-4">
             <Brain className=" md:ml-10" />
@@ -51,8 +51,8 @@ const Navbar = () => {
       </SignedOut>
 
       <SignedIn>
-        <nav className="fixed top-6 inset-x-4 h-16 bg-background border dark:border-slate-700/70 max-w-(--breakpoint-xl) mx-40 rounded-full">
-        <div className="h-full flex items-center justify-between mx-auto px-4">
+        <nav className="fixed top-6 overflow-hidden inset-x-4 h-16 bg-white border dark:border-slate-700/70 max-w-(--breakpoint-xl) mx-40 rounded-full">
+        <div className="h-full flex items-center overflow-hidden justify-between mx-auto px-4">
           <Link href='/home'> 
           <div className="flex gap-4">
             <Brain className=" md:ml-10" />
@@ -63,15 +63,15 @@ const Navbar = () => {
          
           
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 overflow-hidden">
             <Link href='/'>
             <SignOutButton>
-              <Button className="rounded-full w-full bg-white border border-primary-900 font-lg text-primary-700 hover:text-white ">Logout</Button>
+              <Button className="rounded-full overflow-hidden w-full bg-white border border-primary-900 font-lg text-primary-700 hover:text-white ">Logout</Button>
             </SignOutButton>
             </Link>
 
             <Link href='/upload'>
-              <Button className="rounded-full w-full">Upload Resume</Button>
+              <Button className="rounded-full w-full overflow-hidden">Upload Resume</Button>
             </Link>
             {/* Mobile Menu */}
             <div className="md:hidden">

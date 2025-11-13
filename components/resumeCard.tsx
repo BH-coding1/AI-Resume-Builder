@@ -12,7 +12,7 @@ interface ResumeCardProps {
 
 export default function ResumeCard({ title, companyName, atsScore, imageUrl }: ResumeCardProps) {
   return (
-    <Card className="overflow-hidden border border-gray-200 hover:border-gray-300 transition-all duration-300 rounded-2xl bg-white shadow-sm hover:shadow-md">
+    <Card className="overflow-hidden cursor-pointer border border-gray-200 hover:border-gray-300 transition-all duration-300 rounded-2xl bg-white shadow-sm hover:shadow-md">
       {/* Header */}
       <CardHeader className="pb-2 pt-5 px-5 flex items-start justify-between">
         <div className="space-y-1">
@@ -48,7 +48,7 @@ export default function ResumeCard({ title, companyName, atsScore, imageUrl }: R
           <img
             src={imageUrl}
             alt={`Resume preview for ${title}`}
-            className="max-h-5xl w-full  duration-300 hover:scale-[1.01]"
+            className="max-h-5xl w-full "
           />
         </div>
       </CardContent>
