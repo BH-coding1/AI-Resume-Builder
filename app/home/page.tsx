@@ -1,4 +1,4 @@
-'use client'; // Required for useEffect, useState
+"use client"; // Required for useEffect, useState
 
 import ResumeCard from "@/components/resumeCard";
 import { Protect, RedirectToSignIn } from "@clerk/nextjs";
@@ -26,20 +26,24 @@ interface ResponseData {
   optimization_suggestions: string[];
 }
 
-
 async function fetchResumes(): Promise<ResponseData[]> {
-  const response = await fetch(`/api/resumes`, {
-    method: "GET",
-    credentials: "include", 
-  });
+  try {
+    const response = await fetch(`/api/resumes`, {
+      method: "GET",
+      credentials: "include",
+    });
+    if (!response){
+      return []
+    } 
+    if (!response.ok) {
+      throw new Error("Failed to fetch resumes");
+    }
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch resumes");
+    return response.json();
+  } catch (err:any) {
+    throw new Error(err)
   }
-
-  return response.json();
 }
-
 
 const Homepage = () => {
   const [resumes, setResumes] = useState<ResponseData[]>([]);
@@ -51,6 +55,9 @@ const Homepage = () => {
       try {
         setLoading(true);
         const data = await fetchResumes();
+        if(!data){
+          setError('No Resumes yet press Upload Resume')
+        }
         setResumes(data);
         setError(null);
       } catch (err) {
@@ -62,7 +69,7 @@ const Homepage = () => {
     };
 
     loadResumes();
-  }, []); 
+  }, []);
 
   return (
     <Protect fallback={<RedirectToSignIn />}>
@@ -83,7 +90,7 @@ const Homepage = () => {
                 title={resume.jobTitle}
                 companyName={resume.companyName}
                 atsScore={resume.ats_score.score}
-                imageUrl='https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.beamjobs.com%2Fresumes%2Fit-resume-examples&psig=AOvVaw1sT4FjKWLxaviNJIIO0y65&ust=1762888430293000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCJiLjrGl6JADFQAAAAAdAAAAABAK'
+                imageUrl={resume.pdfUrl}
               />
             ))
           ) : (

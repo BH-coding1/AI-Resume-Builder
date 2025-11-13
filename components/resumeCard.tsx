@@ -33,7 +33,7 @@ export default function ResumeCard({ title, companyName, atsScore, imageUrl }: R
       </CardHeader>
 
       {/* Content */}
-      <CardContent className="space-y-5 pt-3 px-5 pb-6">
+      <CardContent className="space-y-5  px-5 pb-6">
         {/* Progress */}
         <div className="space-y-1">
           <div className="flex items-center justify-between text-xs text-gray-500">
@@ -44,11 +44,11 @@ export default function ResumeCard({ title, companyName, atsScore, imageUrl }: R
         </div>
 
         {/* Image */}
-        <div className="aspect-[8.5/11] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
+        <div className="aspect-[1/0.7] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
           <img
             src={imageUrl}
             alt={`Resume preview for ${title}`}
-            className="max-h-5xl w-full object-cover object-top transition-transform duration-300 hover:scale-[1.01]"
+            className="max-h-5xl w-full  duration-300 hover:scale-[1.01]"
           />
         </div>
       </CardContent>
