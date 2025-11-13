@@ -2,7 +2,7 @@
 import { notFound } from "next/navigation";
 import { Protect, RedirectToSignIn } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
-import { connectDB } from "@/lib/db";
+import { connectDB } from "@/app/lib/mongodb";
 import Resume from "@/models/Resume";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Bot, Layout, Palette, Target } from "lucide-react";
@@ -13,11 +13,11 @@ async function getResume(id: string) {
   const user = await currentUser();
   if (!user) return null;
 
-  const doc = await Resume.findOne({ _id: id, userId: user.id }).lean();
-  if (!doc) return null;
+  const resume = await Resume.findOne({ _id: id, userId: user.id });
+  if (!resume) return null;
 
 
-  return { ...doc, _id: doc._id.toString() };
+  return { ...resume, _id: resume._id.toString() };
 }
 
 
