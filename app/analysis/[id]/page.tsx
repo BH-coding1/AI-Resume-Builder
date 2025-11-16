@@ -13,17 +13,19 @@ async function getResume(id: string) {
   const user = await currentUser();
   if (!user) return null;
 
-  const resume = await Resume.findOne({ _id: id, userId: user.id });
-  if (!resume) return null;
+  const doc = await Resume.findOne({ _id: id, userId: user.id });
+  if (!doc) return null;
 
 
-  return { ...resume, _id: resume._id.toString() };
+  return { ...doc, _id: doc._id.toString() };
 }
 
 
-export default async function AnalysisPage({ params }: { params: { id: string } }) {
-  const resume = await getResume(params.id);
-  if (!resume) notFound();                     
+export default async function AnalysisPage({ params }: { params: Promise<{ id: string }> }) { 
+  const { id } = await params;  
+  const resume = await getResume(id);  
+  
+  if (!resume) notFound();
 
   const {
     pdfUrl,
@@ -46,7 +48,7 @@ export default async function AnalysisPage({ params }: { params: { id: string } 
       <div className="min-h-screen bg-gradient-patches pt-30 px-4 sm:px-6 lg:px-8 pb-20">
         <div className="mx-auto max-w-5xl">
 
-          
+          {/* ---------- HERO SCORE ---------- */}
           <Card className="bg-white rounded-2xl border-gray-400 shadow-none p-8 mb-10">
             <CardHeader>
               <CardTitle className="text-4xl sm:text-5xl font-extrabold text-center text-gray-900 mb-3 tracking-tight">
@@ -60,7 +62,7 @@ export default async function AnalysisPage({ params }: { params: { id: string } 
                 <span className="font-semibold text-primary">{companyName}</span>
               </p>
 
-            
+              {/* Circle */}
               <div className="relative flex justify-center mb-8">
                 <div className="relative w-48 h-48 overflow-hidden">
                   <svg className="w-48 h-48 transform -rotate-90">
@@ -100,7 +102,7 @@ export default async function AnalysisPage({ params }: { params: { id: string } 
             </CardContent>
           </Card>
 
-          
+          {/* ---------- METRIC CARDS ---------- */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             {[
               { label: "Tone & Style", score: toneScore, icon: <Palette /> },
@@ -135,7 +137,7 @@ export default async function AnalysisPage({ params }: { params: { id: string } 
             ))}
           </div>
 
-          
+          {/* ---------- ATS SUGGESTIONS ---------- */}
           <Card className="bg-white rounded-xl border-gray-400 shadow-sm p-6 mb-10">
             <CardHeader>
               <CardTitle className="text-xl font-bold text-gray-900">
@@ -175,7 +177,7 @@ export default async function AnalysisPage({ params }: { params: { id: string } 
             </CardContent>
           </Card>
 
-          {/* ---------- FOOTER ---------- */}
+
           <div className="mt-12 text-center text-sm text-gray-500">
             <p>
               Analysis powered by{" "}
@@ -188,5 +190,3 @@ export default async function AnalysisPage({ params }: { params: { id: string } 
   );
 }
 
-
-export const revalidate = 60;

@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/app/lib/mongodb";
 import Resume from "@/models/Resume";
 import { currentUser } from "@clerk/nextjs/server";
+import { revalidatePath } from "next/cache";
+
+
+
+
 
 export async function POST(req: Request) {
   try {
@@ -15,7 +20,7 @@ export async function POST(req: Request) {
       ...body,
       userId: user.id,
     });
-
+    revalidatePath("/home");
     return NextResponse.json({ success: true, resume: newResume });
   } catch (err: any) {
     console.error("❌ Error saving resume:", err);

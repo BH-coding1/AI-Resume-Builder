@@ -3,14 +3,16 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Building2 } from "lucide-react";
 
+
 interface ResumeCardProps {
   title: string;
   companyName: string;
   atsScore: number;
   imageUrl: string;
+  
 }
 
-export default function ResumeCard({ title, companyName, atsScore, imageUrl }: ResumeCardProps) {
+export default function ResumeCard({ title, companyName, atsScore, imageUrl}: ResumeCardProps) {
   return (
     <Card className="overflow-hidden cursor-pointer border border-gray-200 hover:border-gray-300 transition-all duration-300 rounded-2xl bg-white shadow-sm hover:shadow-md">
       {/* Header */}

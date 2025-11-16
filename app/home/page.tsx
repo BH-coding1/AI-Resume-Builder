@@ -2,6 +2,7 @@
 
 import ResumeCard from "@/components/resumeCard";
 import { Protect, RedirectToSignIn } from "@clerk/nextjs";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 // === Types ===
@@ -24,6 +25,7 @@ interface ResponseData {
   companyName: string;
   jobTitle: string;
   optimization_suggestions: string[];
+  _id:string;
 }
 
 async function fetchResumes(): Promise<ResponseData[]> {
@@ -85,13 +87,14 @@ const Homepage = () => {
             </div>
           ) : resumes.length > 0 ? (
             resumes.map((resume, index) => (
+              <Link key={resume._id} href={`analysis/${resume._id}`}>
               <ResumeCard
-                key={index}
-                title={resume.jobTitle}
-                companyName={resume.companyName}
-                atsScore={resume.ats_score.score}
-                imageUrl={resume.pdfUrl}
-              />
+                  key={index}
+                  title={resume.jobTitle}
+                  companyName={resume.companyName}
+                  atsScore={resume.ats_score.score}
+                  imageUrl=''/>
+              </Link>
             ))
           ) : (
             <div className="col-span-full text-center py-10">
