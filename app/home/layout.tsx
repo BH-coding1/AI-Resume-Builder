@@ -25,9 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body>
-        {" "}
+    <>
         <ClerkProvider
           appearance={{
             signIn: {
@@ -41,7 +39,6 @@ export default function RootLayout({
           <Navbar />
           {children}
         </ClerkProvider>
-      </body>
-    </html>
+    </>
   );
 }
