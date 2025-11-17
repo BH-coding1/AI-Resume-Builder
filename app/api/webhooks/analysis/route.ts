@@ -5,39 +5,25 @@ const WEBHOOK_URL = process.env.BACKEND_WEBHOOK!;
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
+    const pdfUrl = formData.get("pdfUrl") as string;
 
-    // Convert FormData to a plain object
-    const data: Record<string, any> = {};
-    let fileContent: string | null = null;
-
-    for (const [key, value] of formData.entries()) {
-      if (value instanceof File) {
-        // If there's a file, convert it to base64
-        const arrayBuffer = await value.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
-        fileContent = buffer.toString("base64");
-        data[key] = {
-          filename: value.name,
-          type: value.type,
-          size: value.size,
-        };
-      } else {
-        data[key] = value;
-      }
+    if (!pdfUrl) {
+      return NextResponse.json({ error: "Missing pdfUrl" }, { status: 400 });
     }
 
-    console.log("✅ Received form data:", data);
-
-    
-    const webhookPayload = {
-      ...data,
-      fileBase64: fileContent,
+    const payload = {
+      companyName: formData.get("companyName"),
+      jobTitle: formData.get("jobTitle"),
+      description: formData.get("description"),
+      pdfUrl,
     };
+
+    console.log("✅ Received form data:", payload);
 
     const response = await fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(webhookPayload),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {

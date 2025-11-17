@@ -67,12 +67,26 @@ const UploadForm = () => {
       setIsProcessing(true);
       setStatusText("Uploading the file...");
 
+      
+    // Upload PDF
+    const uploadFormData = new FormData();
+    uploadFormData.append("file", file);
+
+    const uploadRes = await fetch("/api/upload-pdf", {
+      method: "POST",
+      body: uploadFormData,
+    });
+
+    if (!uploadRes.ok) throw new Error("Failed to upload PDF");
+
+    const { pdfUrl } = await uploadRes.json();   
+
       // Prepare the form data to send to the backend API
       const formData = new FormData();
       formData.append("companyName", companyName);
       formData.append("jobTitle", jobTitle);
       formData.append("description", description);
-      formData.append("file", file);
+      formData.append("pdfUrl", pdfUrl);  
 
       // Send the data to the backend API
       const response = await fetch("/api/webhooks/analysis", {
@@ -113,20 +127,24 @@ const UploadForm = () => {
       // setting the response context
 
       setResponse({
-        pdfUrl: imageFile.imageUrl, //include the PDF image
+        pdfUrl, 
         scores: {
           tone_score: result.result[0].message.content.scores?.tone_score || 0,
-          structure_score: result.result[0].message.content.scores?.structure_score || 0,
-          skills_match_score: result.result[0].message.content.scores?.skills_match_score || 0,
+          structure_score:
+            result.result[0].message.content.scores?.structure_score || 0,
+          skills_match_score:
+            result.result[0].message.content.scores?.skills_match_score || 0,
         },
         ats_score: {
           score: result.result[0].message.content.ats_score?.score || 0,
-          justification: result.result[0].message.content.ats_score?.justification || "",
+          justification:
+            result.result[0].message.content.ats_score?.justification || "",
         },
         resume_analysis: result.result[0].message.content.resume_analysis || [],
-        optimization_suggestions: result.result[0].message.content.optimization_suggestions || [],
+        optimization_suggestions:
+          result.result[0].message.content.optimization_suggestions || [],
         companyName: analysisResults.companyname,
-        jobTitle: analysisResults.title
+        jobTitle: analysisResults.title,
       });
 
       setStatusText("Analysis complete!");
