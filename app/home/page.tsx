@@ -93,7 +93,7 @@ const Homepage = () => {
                   title={resume.jobTitle}
                   companyName={resume.companyName}
                   atsScore={resume.ats_score.score}
-                  imageUrl=''/>
+                  imageUrl={resume.pdfUrl}/>
               </Link>
             ))
           ) : (

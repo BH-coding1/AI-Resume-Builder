@@ -52,6 +52,7 @@ export default function ResumeCard({ title, companyName, atsScore, imageUrl}: Re
             alt={`Resume preview for ${title}`}
             className="max-h-5xl w-full "
           />
+          <>{imageUrl}</>
         </div>
       </CardContent>
     </Card>

@@ -7,7 +7,11 @@ import Resume from "@/models/Resume";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Bot, Layout, Palette, Target } from "lucide-react";
 
-
+// Fix the resumes save when i leave the page , stop doing that
+// Fix the pdf image not showing up in the home page and anallysis
+// Figure out if multiple users can use the app , n8n will allow or not 
+// Fix the landing pages , figure out screenshots etc
+ 
 async function getResume(id: string) {
   await connectDB();
   const user = await currentUser();
@@ -34,8 +38,8 @@ export default async function AnalysisPage({ params }: { params: Promise<{ id: s
     scores = { tone_score: 0, structure_score: 0, skills_match_score: 0 },
     ats_score = { score: 0, justification: "" },
     optimization_suggestions = [],
-  } = resume;
-
+  } = resume._doc;
+  console.log('resume:',resume._doc)
   const toneScore = scores.tone_score ?? 0;
   const structureScore = scores.structure_score ?? 0;
   const skillsScore = scores.skills_match_score ?? 0;
@@ -169,7 +173,7 @@ export default async function AnalysisPage({ params }: { params: Promise<{ id: s
             <CardContent className="p-6 bg-gray-50">
               <div className="bg-white rounded-lg p-4 border-2 border-dashed border-gray-300">
                 {pdfUrl ? (
-                  <iframe src={pdfUrl} className="w-full h-96 rounded-md shadow-md" title="Resume PDF" />
+                  <img src={pdfUrl} className="w-full h-auto rounded-md shadow-md" title="Resume PDF" />
                 ) : (
                   <p className="text-center text-gray-500">No preview available.</p>
                 )}

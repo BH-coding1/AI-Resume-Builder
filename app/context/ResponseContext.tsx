@@ -33,22 +33,9 @@ const ResponseContext = createContext<ResponseContextType | undefined>(undefined
 export const ResponseProvider = ({ children }: { children: ReactNode }) => {
   const [response, setResponseState] = useState<ResponseData | null>(null);
 
-  // Load from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("resumeResponse");
-    if (saved) {
-      try {
-        setResponseState(JSON.parse(saved));
-      } catch (err) {
-        console.error("Failed to parse saved response:", err);
-      }
-    }
-  }, []);
-
   // Save to localStorage whenever response changes
   useEffect(() => {
     if (response) {
-      localStorage.setItem("resumeResponse", JSON.stringify(response));
       saveToBackend(response);
     }
   }, [response]);
