@@ -1,28 +1,43 @@
-
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 
 export async function POST(request: Request) {
+ 
   const user = await currentUser();
-if (!user) {
-  return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-}
-const userId = user.id;
+
+  if (!user) {
+    return NextResponse.json(
+      { error: "Unauthorized – no user" },
+      { status: 401 }
+    );
+  }
+
   const formData = await request.formData();
-  const file = formData.get("file") as File;
+  const file = formData.get("file") ;
 
-  if (!file || !userId)
-    return NextResponse.json({ error: "Bad request" }, { status: 400 });
+  if (!file) {
+    return NextResponse.json(
+      { error: "No file uploaded" },
+      { status: 400 }
+    );
+  }
 
-  const { url } = await put(
-    `resumes/${userId}/${crypto.randomUUID()}.pdf`,
-    file,
-    {
-      access: "public",
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    }
-  );
+  try {
+    const { url } = await put(
+      `resumes/${user.id}/${crypto.randomUUID()}.pdf`,
+      file,
+      {
+        access: "public",
+      }
+    );
 
-  return NextResponse.json({ pdfUrl: url });
+    return NextResponse.json({ pdfUrl: url });
+  } catch (error: any) {
+    console.error("Vercel Blob upload failed:", error);
+    return NextResponse.json(
+      { error: "Failed to upload to storage", details: error.message },
+      { status: 500 }
+    );
+  }
 }

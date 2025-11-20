@@ -12,7 +12,7 @@ const AnalysisPage = () => {
   const title = searchParams?.get("title") || "Position";
   const companyname = searchParams?.get("companyname") || "Company";
 
-  // ✅ Get AI analysis from context
+  
   const { response } = useResponse();
 
   if (!response) {

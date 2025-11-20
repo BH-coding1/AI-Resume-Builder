@@ -76,8 +76,11 @@ const UploadForm = () => {
       method: "POST",
       body: uploadFormData,
     });
-
-    if (!uploadRes.ok) throw new Error("Failed to upload PDF");
+    
+    if (!uploadRes.ok){
+      console.log(uploadRes.json())
+      throw new Error("Failed to upload PDF");
+    } 
 
     const { pdfUrl } = await uploadRes.json();   
 
@@ -121,7 +124,6 @@ const UploadForm = () => {
       const analysisResults = {
         pdfImage: imageFile.imageUrl,
         title: jobTitle,
-        atsScore: Math.floor(Math.random() * 100),
         companyname: companyName,
       };
       // setting the response context
@@ -153,8 +155,7 @@ const UploadForm = () => {
       router.push(
         `/analysis?pdfImage=${encodeURIComponent(
           analysisResults.pdfImage
-        )}&title=${encodeURIComponent(analysisResults.title)}&atsScore=${
-          analysisResults.atsScore
+        )}&title=${encodeURIComponent(analysisResults.title)}
         }&companyname=${encodeURIComponent(analysisResults.companyname)}`
       );
     } catch (error) {
