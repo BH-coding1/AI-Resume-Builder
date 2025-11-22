@@ -1,4 +1,4 @@
-"use client"; // Required for useEffect, useState
+"use client";
 
 import ResumeCard from "@/components/resumeCard";
 import { Protect, RedirectToSignIn } from "@clerk/nextjs";

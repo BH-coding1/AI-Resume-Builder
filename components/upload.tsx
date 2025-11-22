@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // For navigation
+import { useRouter } from "next/navigation"; 
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { convertPdfToImage } from "@/app/lib/pdfToImage";
@@ -67,41 +67,40 @@ const UploadForm = () => {
       setIsProcessing(true);
       setStatusText("Uploading the file...");
 
-      
-    // Upload PDF
-    const uploadFormData = new FormData();
-    uploadFormData.append("file", file);
+      // Upload PDF
+      const uploadFormData = new FormData();
+      uploadFormData.append("file", file);
 
-    const uploadRes = await fetch("/api/upload-pdf", {
-      method: "POST",
-      body: uploadFormData,
-    });
-    
-    if (!uploadRes.ok){
-      console.log(uploadRes.json())
-      throw new Error("Failed to upload PDF");
-    } 
+      const uploadRes = await fetch("/api/upload-pdf", {
+        method: "POST",
+        body: uploadFormData,
+      });
 
-    const { pdfUrl } = await uploadRes.json();   
+      if (!uploadRes.ok) {
+        console.log(uploadRes.json());
+        throw new Error("Failed to upload PDF");
+      }
+
+      const { pdfUrl } = await uploadRes.json();
 
       // Prepare the form data to send to the backend API
       const formData = new FormData();
       formData.append("companyName", companyName);
       formData.append("jobTitle", jobTitle);
       formData.append("description", description);
-      formData.append("pdfUrl", pdfUrl);  
+      formData.append("pdfUrl", pdfUrl);
 
       // Send the data to the backend API
-      const response = await fetch("/api/webhooks/analysis", {
+      const apiResponse = await fetch("/api/webhooks/analysis", {
         method: "POST",
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error(`API request failed with status ${response.status}`);
+      if (!apiResponse.ok) {
+        throw new Error(`API request failed with status ${apiResponse.status}`);
       }
 
-      const result = await response.json();
+      const result = await apiResponse.json();
       console.log("content", result.result[0].message.content);
 
       console.log("API response:", result);
@@ -126,10 +125,9 @@ const UploadForm = () => {
         title: jobTitle,
         companyname: companyName,
       };
-      // setting the response context
-
-      setResponse({
-        pdfUrl, 
+      
+      const savedResponse = await setResponse({
+        pdfUrl,
         scores: {
           tone_score: result.result[0].message.content.scores?.tone_score || 0,
           structure_score:
@@ -148,16 +146,16 @@ const UploadForm = () => {
         companyName: analysisResults.companyname,
         jobTitle: analysisResults.title,
       });
-
+      await new Promise((r) => setTimeout(r, 500));
       setStatusText("Analysis complete!");
       toast.success("Analysis completed successfully!");
 
-      router.push(
-        `/analysis?pdfImage=${encodeURIComponent(
-          analysisResults.pdfImage
-        )}&title=${encodeURIComponent(analysisResults.title)}
-        }&companyname=${encodeURIComponent(analysisResults.companyname)}`
-      );
+      
+      if (!savedResponse?._id ) {
+        toast.error("Failed to save resume");
+        return;
+      }
+      router.push(`/analysis/${savedResponse._id}`);
     } catch (error) {
       console.error("Error during analysis:", error);
       setStatusText("An error occurred during the analysis.");

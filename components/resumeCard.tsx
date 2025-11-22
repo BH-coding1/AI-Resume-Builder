@@ -2,6 +2,8 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Building2 } from "lucide-react";
+import PdfThumbnail from "./pdfPreview";
+import ScoreCircle from "./ScoreCircle";
 
 
 interface ResumeCardProps {
@@ -16,7 +18,7 @@ export default function ResumeCard({ title, companyName, atsScore, imageUrl}: Re
   return (
     <Card className="overflow-hidden cursor-pointer border border-gray-200 hover:border-gray-300 transition-all duration-300 rounded-2xl bg-white shadow-sm hover:shadow-md">
       {/* Header */}
-      <CardHeader className="pb-2 pt-5 px-5 flex items-start justify-between">
+      <CardHeader className="flex flex-row gap-2 justify-between min-h-[110px] max-sm:flex-col items-center max-md:justify-center max-md:items-center">
         <div className="space-y-1">
           <CardTitle className="text-base font-semibold text-gray-900">
             {title}
@@ -26,12 +28,8 @@ export default function ResumeCard({ title, companyName, atsScore, imageUrl}: Re
             {companyName}
           </CardDescription>
         </div>
-
-        <Badge
-          className="bg-primary text-white px-3 py-1 text-xs font-medium rounded-full shadow-sm"
-        >
-          {atsScore}%
-        </Badge>
+        <div className="pt-0 "><ScoreCircle score={atsScore}/></div>
+        
       </CardHeader>
 
       {/* Content */}
@@ -39,20 +37,12 @@ export default function ResumeCard({ title, companyName, atsScore, imageUrl}: Re
         {/* Progress */}
         <div className="space-y-1">
           <div className="flex items-center justify-between text-xs text-gray-500">
-            <span>ATS Score</span>
-            <span className="font-medium text-gray-700">{atsScore}/100</span>
           </div>
-          <Progress value={atsScore} className="h-1.5 bg-gray-100" />
         </div>
 
         {/* Image */}
-        <div className="aspect-[1/0.7] w-full overflow-hidden rounded-lg border border-gray-100 bg-gray-50">
-          <img
-            src={imageUrl}
-            alt={`Resume preview for ${title}`}
-            className="max-h-5xl w-full "
-          />
-          <>{imageUrl}</>
+        <div className="aspect-[1/0.7] w-full overflow-hidden rounded-2xl border border-gray-300 bg-gray-50">
+          <PdfThumbnail pdfUrl={imageUrl} />
         </div>
       </CardContent>
     </Card>

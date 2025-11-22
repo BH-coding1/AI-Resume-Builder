@@ -14,7 +14,7 @@ const AnalysisPage = () => {
 
   
   const { response } = useResponse();
-
+  console.log('analysis page response',response)
   if (!response) {
     return (
       <Protect fallback={<RedirectToSignIn />}>

@@ -3,24 +3,30 @@ import { connectDB } from "@/app/lib/mongodb";
 import Resume from "@/models/Resume";
 import { currentUser } from "@clerk/nextjs/server";
 
-
 export async function POST(req: Request) {
   try {
     await connectDB();
     const user = await currentUser();
-    if (!user) return NextResponse.json({ success: false, error: "Not authenticated" }, { status: 401 });
-
-    const body = await req.json();
-
-    const newResume = await Resume.create({
-      ...body,
-      userId: user.id,
-    });
+    if (!user)
+      return NextResponse.json(
+        { success: false, error: "Not authenticated" },
+        { status: 401 }
+      );
     
-    return NextResponse.json({ success: true, resume: newResume });
+    const body = await req.json();
+    const savedResume = await Resume.findOneAndUpdate(
+      { pdfUrl: body.pdfUrl },
+      { $set: { ...body, userId: user.id } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+
+    return NextResponse.json({ success: true, resume: savedResume });
   } catch (err: any) {
     console.error("❌ Error saving resume:", err);
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: err.message },
+      { status: 500 }
+    );
   }
 }
 
@@ -28,12 +34,20 @@ export async function GET() {
   try {
     await connectDB();
     const user = await currentUser();
-    if (!user) return NextResponse.json({ success: false, error: "Not authenticated" }, { status: 401 });
+    if (!user)
+      return NextResponse.json(
+        { success: false, error: "Not authenticated" },
+        { status: 401 }
+      );
 
-    const resumes = await Resume.find({ userId: user.id }).sort({ createdAt: -1 });
+    const resumes = await Resume.find({ userId: user.id }).sort({
+      createdAt: -1,
+    });
     return NextResponse.json(resumes);
   } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: err.message },
+      { status: 500 }
+    );
   }
 }
-

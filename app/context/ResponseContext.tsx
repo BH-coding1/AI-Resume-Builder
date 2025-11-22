@@ -13,6 +13,7 @@ interface AtsScore {
 }
 
 interface ResponseData {
+  _id?: string;
   pdfUrl: string;
   scores: Scores;
   ats_score: AtsScore;
@@ -24,7 +25,7 @@ interface ResponseData {
 
 interface ResponseContextType {
   response: ResponseData | null;
-  setResponse: (data: ResponseData) => void;
+  setResponse: (data: ResponseData) => Promise<ResponseData>;
   clearResponse: () => void;
 }
 
@@ -36,7 +37,8 @@ export const ResponseProvider = ({ children }: { children: ReactNode }) => {
   // Save to localStorage whenever response changes
   useEffect(() => {
     if (response) {
-      saveToBackend(response);
+      console.log('data in context:', response)
+      setResponse(response)
     }
   }, [response]);
 
@@ -50,13 +52,17 @@ export const ResponseProvider = ({ children }: { children: ReactNode }) => {
       const result = await res.json();
       if (!result.success) throw new Error(result.error || "Failed to save resume");
       console.log("✅ Saved to backend:", result.resume);
+      return result.resume;
     } catch (err) {
       console.error("❌ Failed to save resume:", err);
     }
   };
 
-  const setResponse = (data: ResponseData) => {
+  const setResponse = async (data: ResponseData) => {
     setResponseState(data);
+    const savedResume = await saveToBackend(data);
+    setResponseState(prev => prev ? { ...prev, _id: savedResume._id } : null);
+    return savedResume;
   };
 
   const clearResponse = () => {
