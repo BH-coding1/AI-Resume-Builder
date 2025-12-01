@@ -1,4 +1,4 @@
-// app/api/webhooks/clerk/route.ts
+
 import { verifyWebhook } from "@clerk/nextjs/webhooks";
 import { NextResponse } from "next/server";
 import User from "@/models/User";
@@ -39,3 +39,5 @@ export async function POST(req: any) {
     return new NextResponse("Error: Verification error", { status: 400 });
   }
 }
+export const dynamic = 'force-dynamic'
+

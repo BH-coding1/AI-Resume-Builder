@@ -1,4 +1,4 @@
-// app/analysis/[id]/page.tsx
+
 import { notFound } from "next/navigation";
 import { Protect, RedirectToSignIn } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
@@ -8,7 +8,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Bot, Layout, Palette, Target } from "lucide-react";
 
 
-// NEW: Import the dropdown component
 import AnalysisDropdowns from "@/components/AnalysisDropdowns";
 
 async function getResume(id: string) {
@@ -39,7 +38,7 @@ export default async function AnalysisPage({
     scores = { tone_score: 0, structure_score: 0, skills_match_score: 0 },
     ats_score = { score: 0, justification: "" },
     optimization_suggestions = [],
-    // NEW: Extract AI detailed analysis
+  
     tone_analysis = [],
     structure_analysis = [],
     skills_match_analysis = [],
