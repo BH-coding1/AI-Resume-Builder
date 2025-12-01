@@ -21,6 +21,9 @@ interface ResponseData {
   jobTitle:string;
   resume_analysis: string[];
   optimization_suggestions: string[];
+  tone_analysis: string[]; 
+  structure_analysis: string[];  
+  skills_match_analysis: string[];
 }
 
 interface ResponseContextType {

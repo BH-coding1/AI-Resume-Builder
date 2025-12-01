@@ -12,7 +12,7 @@ const Navbar = () => {
   return (
     <div className=" bg-muted">
       <SignedOut>
-      <nav className="fixed top-6 overflow-hidden inset-x-4 h-16 bg-background border dark:border-slate-700/70 max-w-(--breakpoint-xl) mx-auto rounded-full">
+      <nav className="fixed top-6 z-40 overflow-hidden inset-x-4 h-16 bg-background border dark:border-slate-700/70 max-w-(--breakpoint-xl) mx-auto rounded-full">
         <div className="h-full flex items-center justify-between mx-auto px-4">
           <div className="flex gap-4">
             <Brain className=" md:ml-10" />

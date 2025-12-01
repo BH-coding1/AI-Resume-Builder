@@ -234,7 +234,7 @@ const AnalysisPage = () => {
           <div className="mt-12 text-center text-sm text-gray-500">
             <p>
               Analysis powered by{" "}
-              <span className="font-semibold text-indigo-600">RefineAi</span>
+              <span className="font-semibold text-indigo-600">ResuBuild</span>
             </p>
           </div>
         </div>

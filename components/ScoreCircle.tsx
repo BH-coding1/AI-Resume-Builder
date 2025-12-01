@@ -7,12 +7,12 @@ const ScoreCircle = ({ score = 75 }: { score: number }) => {
     const strokeDashoffset = circumference * (1 - progress);
 
     return (
-        <div className="relative w-[100px] h-[100px]">
+        <div className="relative w-[100px] h-[100px] ">
             <svg
                 height="100%"
                 width="100%"
                 viewBox="0 0 100 100"
-                className="transform -rotate-90"
+                className="transform -rotate-90 "
             >
                 {/* Background circle */}
                 <circle

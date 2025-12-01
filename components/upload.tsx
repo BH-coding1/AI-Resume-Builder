@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { convertPdfToImage } from "@/app/lib/pdfToImage";
@@ -20,6 +20,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { InputGroupTextarea } from "@/components/ui/input-group";
 import FileUploaderButton from "./fileUploaderButton";
+
+// NEW — only this import added
+import { convertPdfToText } from "@/app/lib/pdfToText";
 
 const formSchema = z.object({
   companyName: z
@@ -67,7 +70,7 @@ const UploadForm = () => {
       setIsProcessing(true);
       setStatusText("Uploading the file...");
 
-      // Upload PDF
+      // Upload PDF to vercel to store perm
       const uploadFormData = new FormData();
       uploadFormData.append("file", file);
 
@@ -83,14 +86,22 @@ const UploadForm = () => {
 
       const { pdfUrl } = await uploadRes.json();
 
-      // Prepare the form data to send to the backend API
+      // NEW — Extract text from PDF (client-side)
+      setStatusText("Extracting text from your resume...");
+      const textResult = await convertPdfToText(file);
+      if (textResult.error) throw new Error(textResult.error);
+       
+
+      // Prepare the form data to send to the backend API webhook for the ai 
       const formData = new FormData();
       formData.append("companyName", companyName);
       formData.append("jobTitle", jobTitle);
       formData.append("description", description);
-      formData.append("pdfUrl", pdfUrl);
+      formData.append("file", file);
+      formData.append("resumeText", textResult.text); // THIS IS THE ONLY NEW LINE
 
-      // Send the data to the backend API
+      console.log(formData);
+      // Send the data to the backend API webhook for the ai 
       const apiResponse = await fetch("/api/webhooks/analysis", {
         method: "POST",
         body: formData,
@@ -102,7 +113,6 @@ const UploadForm = () => {
 
       const result = await apiResponse.json();
       console.log("content", result.result[0].message.content);
-
       console.log("API response:", result);
 
       setStatusText("Analyzing the resume...");
@@ -125,7 +135,7 @@ const UploadForm = () => {
         title: jobTitle,
         companyname: companyName,
       };
-      
+      // sending to context to store in bakcend
       const savedResponse = await setResponse({
         pdfUrl,
         scores: {
@@ -140,6 +150,9 @@ const UploadForm = () => {
           justification:
             result.result[0].message.content.ats_score?.justification || "",
         },
+        tone_analysis: result.result[0].message.content.tone_analysis || [],
+        structure_analysis: result.result[0].message.content.structure_analysis || [],
+        skills_match_analysis: result.result[0].message.content.skillsMatch_analysis || [],
         resume_analysis: result.result[0].message.content.resume_analysis || [],
         optimization_suggestions:
           result.result[0].message.content.optimization_suggestions || [],
@@ -150,8 +163,7 @@ const UploadForm = () => {
       setStatusText("Analysis complete!");
       toast.success("Analysis completed successfully!");
 
-      
-      if (!savedResponse?._id ) {
+      if (!savedResponse?._id) {
         toast.error("Failed to save resume");
         return;
       }

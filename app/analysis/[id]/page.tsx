@@ -6,11 +6,10 @@ import { connectDB } from "@/app/lib/mongodb";
 import Resume from "@/models/Resume";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Bot, Layout, Palette, Target } from "lucide-react";
-import { convertPdfToImage } from "@/app/lib/pdfToImage";
 import PdfPreview from "@/components/pdfPreview";
-// Fix the pdf image not showing up in the home page and anallysis
-// Figure out if multiple users can use the app , n8n will allow or not
-// Fix the landing pages , figure out screenshots etc
+
+// NEW: Import the dropdown component
+import AnalysisDropdowns from "@/components/AnalysisDropdowns";
 
 async function getResume(id: string) {
   await connectDB();
@@ -20,7 +19,7 @@ async function getResume(id: string) {
   const doc = await Resume.findOne({ _id: id, userId: user.id });
   if (!doc) return null;
 
-  return { ...doc, _id: doc._id.toString() };
+  return { ...doc._doc, _id: doc._id.toString() };
 }
 
 export default async function AnalysisPage({
@@ -40,19 +39,23 @@ export default async function AnalysisPage({
     scores = { tone_score: 0, structure_score: 0, skills_match_score: 0 },
     ats_score = { score: 0, justification: "" },
     optimization_suggestions = [],
-  } = resume._doc;
-  console.log("resume:", resume._doc);
+    // NEW: Extract AI detailed analysis
+    tone_analysis = [],
+    structure_analysis = [],
+    skills_match_analysis = [],
+  } = resume;
+
   const toneScore = scores.tone_score ?? 0;
   const structureScore = scores.structure_score ?? 0;
   const skillsScore = scores.skills_match_score ?? 0;
   const atsScore = ats_score.score ?? 0;
   const justification = ats_score.justification ?? "";
-  const atsImprovements = optimization_suggestions;
+
   return (
     <Protect fallback={<RedirectToSignIn />}>
       <div className="min-h-screen bg-gradient-patches pt-30 px-4 sm:px-6 lg:px-8 pb-20">
         <div className="mx-auto max-w-5xl">
-          {/* ---------- HERO SCORE ---------- */}
+          {/* HERO SCORE */}
           <Card className="bg-white rounded-2xl border-gray-400 shadow-none p-8 mb-10">
             <CardHeader>
               <CardTitle className="text-4xl sm:text-5xl font-extrabold text-center text-gray-900 mb-3 tracking-tight">
@@ -69,18 +72,10 @@ export default async function AnalysisPage({
                 </span>
               </p>
 
-              {/* Circle */}
               <div className="relative flex justify-center mb-8">
                 <div className="relative w-48 h-48 overflow-hidden">
                   <svg className="w-48 h-48 transform -rotate-90">
-                    <circle
-                      cx="96"
-                      cy="96"
-                      r="88"
-                      stroke="#e5e7eb"
-                      strokeWidth="14"
-                      fill="none"
-                    />
+                    <circle cx="96" cy="96" r="88" stroke="#e5e7eb" strokeWidth="14" fill="none" />
                     <circle
                       cx="96"
                       cy="96"
@@ -100,9 +95,7 @@ export default async function AnalysisPage({
                     </defs>
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-5xl font-bold text-gray-900">
-                      {atsScore}
-                    </span>
+                    <span className="text-5xl font-bold text-gray-900">{atsScore}</span>
                     <span className="text-sm text-gray-500 mt-1">/100</span>
                   </div>
                 </div>
@@ -126,13 +119,11 @@ export default async function AnalysisPage({
                 </p>
               </div>
 
-              <p className="mt-4 text-center text-gray-600 italic">
-                {justification}
-              </p>
+              <p className="mt-4 text-center text-gray-600 italic">{justification}</p>
             </CardContent>
           </Card>
 
-          {/* ---------- METRIC CARDS ---------- */}
+          {/* METRIC CARDS (unchanged) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
             {[
               { label: "Tone & Style", score: toneScore, icon: <Palette /> },
@@ -158,32 +149,20 @@ export default async function AnalysisPage({
                           : "bg-rose-100 text-rose-700"
                       }`}
                     >
-                      {m.score >= 80
-                        ? "Strong"
-                        : m.score >= 60
-                        ? "Good"
-                        : "Improve"}
+                      {m.score >= 80 ? "Strong" : m.score >= 60 ? "Good" : "Improve"}
                     </span>
                   </div>
-                  <CardTitle className="text-sm font-medium text-gray-700">
-                    {m.label}
-                  </CardTitle>
+                  <CardTitle className="text-sm font-medium text-gray-700">{m.label}</CardTitle>
                 </CardHeader>
                 <CardContent className="px-5 pb-5">
                   <p className="text-3xl font-bold text-gray-900">
                     {m.score}
-                    <span className="text-sm text-gray-500 font-medium">
-                      /100
-                    </span>
+                    <span className="text-sm text-gray-500 font-medium">/100</span>
                   </p>
                   <div className="mt-3 w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
                     <div
                       className={`h-full rounded-full transition-all duration-700 ${
-                        m.score >= 80
-                          ? "bg-emerald-500"
-                          : m.score >= 60
-                          ? "bg-amber-500"
-                          : "bg-rose-500"
+                        m.score >= 80 ? "bg-emerald-500" : m.score >= 60 ? "bg-amber-500" : "bg-rose-500"
                       }`}
                       style={{ width: `${m.score}%` }}
                     />
@@ -193,7 +172,7 @@ export default async function AnalysisPage({
             ))}
           </div>
 
-          {/* ---------- ATS SUGGESTIONS ---------- */}
+          {/* ATS OPTIMIZATION SUGGESTIONS */}
           <Card className="bg-white rounded-xl border-gray-400 shadow-sm p-6 mb-10">
             <CardHeader>
               <CardTitle className="text-xl font-bold text-gray-900">
@@ -202,23 +181,34 @@ export default async function AnalysisPage({
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {atsImprovements.map((s: string, i: number) => (
+                {optimization_suggestions.map((s: string, i: number) => (
                   <div
                     key={i}
                     className="flex items-start p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border border-amber-200 group hover:from-amber-100 hover:to-orange-100 transition-all"
                   >
                     <span className="text-amber-600 font-semibold mr-3">•</span>
-                    <p className="text-gray-700 group-hover:text-gray-900">
-                      {s}
-                    </p>
+                    <p className="text-gray-700 group-hover:text-gray-900">{s}</p>
                   </div>
                 ))}
               </div>
             </CardContent>
           </Card>
 
-          {/* ---------- RESUME PREVIEW ---------- */}
-          <Card className="bg-white border border-gray-200">
+          {/* DROPDOWNS */}
+          <div className='mb-5'>
+          <AnalysisDropdowns
+            data={{
+              tone_score: toneScore,
+              structure_score: structureScore,
+              skills_match_score: skillsScore,
+              tone_analysis,
+              structure_analysis,
+              skills_match_analysis,
+            }}
+          />
+          </div>
+          {/* RESUME PREVIEW */}
+          <Card className="bg-white border border-gray-200 mt-10">
             <CardHeader className="bg-primary-900 p-5 text-white">
               <CardTitle className="text-xl font-bold">
                 Resume: {companyName} - {jobTitle}
@@ -239,7 +229,7 @@ export default async function AnalysisPage({
           <div className="mt-12 text-center text-sm text-gray-500">
             <p>
               Analysis powered by{" "}
-              <span className="font-semibold text-indigo-600">RefineAi</span>
+              <span className="font-semibold text-indigo-600">ResuBuild</span>
             </p>
           </div>
         </div>
