@@ -6,7 +6,7 @@ import { connectDB } from "@/app/lib/mongodb";
 import Resume from "@/models/Resume";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Bot, Layout, Palette, Target } from "lucide-react";
-import PdfPreview from "@/components/pdfPreview";
+
 
 // NEW: Import the dropdown component
 import AnalysisDropdowns from "@/components/AnalysisDropdowns";
