@@ -38,7 +38,7 @@
     "**/*.mts",
     ".next\\dev/types/**/*.ts",
     ".next\\dev/types/**/*.ts"
-, "app/api/webhooks/analysis/route.ts"  ],
+, "app/api/webhooks/analysis/route.ts", "app/lib/pdfToText.js"  ],
   "exclude": [
     "node_modules"
   ]

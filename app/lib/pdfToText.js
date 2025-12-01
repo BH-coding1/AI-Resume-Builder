@@ -1,14 +1,7 @@
-// app/lib/convertPdfToText.ts
-export interface PdfTextResult {
-  text: string;
-  error?: string;
-}
 
-let pdfjsLib: any = null;
-let isLoading = false;
-let loadPromise: Promise<any> | null = null;
 
-async function loadPdfJs(): Promise<any> {
+
+async function loadPdfJs() {
   if (pdfjsLib) return pdfjsLib;
   if (loadPromise) return loadPromise;
 
@@ -26,7 +19,7 @@ async function loadPdfJs(): Promise<any> {
   return loadPromise;
 }
 
-export async function convertPdfToText(file: File): Promise<PdfTextResult> {
+export async function convertPdfToText(file) {
   try {
     const lib = await loadPdfJs();
 
@@ -38,12 +31,12 @@ export async function convertPdfToText(file: File): Promise<PdfTextResult> {
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
-      const strings = content.items.map((item: any) => item.str);
+      const strings = content.items.map((item) => item.str);
       fullText += strings.join(" ") + "\n";
     }
 
     return { text: fullText.trim() };
-  } catch (err: any) {
+  } catch (err) {
     console.error("Text extraction failed:", err);
     return {
       text: "",
