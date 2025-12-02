@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ArrowUpFromLine } from "lucide-react";
 
 interface Hero7Props {
   heading?: string;
@@ -21,12 +22,12 @@ interface Hero7Props {
 
 const Hero = ({
   heading = "Elevate Your Resume with AI-Powered Precision",
-  description = "Transform your resume with expertly crafted content using AI, Tailwind, and Shadcn UI. Copy and paste professional templates to stand out in your job search.",
+  description = "Transform your resume with expertly crafted analysis using AI for ATS optimization. Professional analysis to stand out in your job search.",
   button = {
-    text: "Import Resume",
+    text: "Upload your Resume",
     url:'/upload'
   },
-  imageSrc = "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/placeholder-1.svg",
+  imageSrc = "/main.png",
   imageAlt = "placeholder",
   reviews = {
     count: 200,
@@ -64,15 +65,15 @@ const Hero = ({
             {description}
           </p>
         </div>
-        <Button asChild  className="mt-10 rounded-xl px-10 py-5">
-          <a href={button.url}>{button.text}</a>
+        <Button asChild  className="mt-10 rounded-xl px-20 py-7">
+          <a href={button.url}><ArrowUpFromLine /> {button.text}</a>
         </Button>
       </div>
-      <div className="mt-30 flex flex-col px-5">
+      <div className="mt-30 flex flex-col px-5 ">
         <img
           src={imageSrc}
           alt={imageAlt}
-          className="mx-auto h-full max-h-[524px] w-full max-w-5xl rounded-2xl object-cover"
+          className="mx-auto border-2 border-purple-300 h-full max-h-[480px] w-full max-w-5xl rounded-2xl object-cover"
         />
       </div>
     </section>

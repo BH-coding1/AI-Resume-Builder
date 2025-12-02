@@ -1,3 +1,4 @@
+import { BadgeCheck, Crosshair, Sparkles, Target } from "lucide-react";
 import React from "react";
 
 const HowItWorks = () => {
@@ -8,26 +9,38 @@ const HowItWorks = () => {
           How it works?
         </h2>
         <p className="mt-4 text-xl text-muted-foreground text-wrap">
-          Our AI-powered resume fixer enhances your resume, making it more professional and tailored to impress employers.
+          Our AI-powered resume analysis analyses your resume, making it more
+          professional and tailored to impress employers.
         </p>
 
-        <div className="mt-16 sm:mt-24 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16 justify-center">
-          <div className="max-w-3xs">
-            <span className="text-5xl font-semibold">96%</span>
+        <div className="mt-10 sm:mt-24 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+          {/* Block 1 */}
+          <div className="max-w-3xs p-6 rounded-2xl  border border-zinc-800">
+            <span className="text-5xl font-semibold justify-center flex items-center gap-3">
+              <Target className="w-12 h-12 justify-center" />
+            </span>
+            <p className="mt-6 text-lg">More accurate resume ATS score</p>
+          </div>
+
+          {/* Block 2 */}
+          <div className="max-w-3xs p-6 rounded-2xl border border-zinc-800">
+            <span className="text-5xl font-semibold justify-center flex items-center gap-3">
+              <Sparkles className="w-12 h-12 justify-center" />
+
+            </span>
             <p className="mt-6 text-lg">
-              of users report a more polished and professional resume
+              Easier to improve resume for job applications
             </p>
           </div>
-          <div className="max-w-3xs">
-            <span className="text-5xl font-semibold">95%</span>
+
+          {/* Block 3 */}
+          <div className="max-w-3xs p-6 rounded-2xl  border border-zinc-800">
+            <span className="text-5xl font-semibold justify-center flex items-center gap-3">
+              <BadgeCheck className="w-12 h-12 justify-center" />
+    
+            </span>
             <p className="mt-6 text-lg">
-              of users find it easier to customize their resume for job applications
-            </p>
-          </div>
-          <div className="max-w-3xs">
-            <span className="text-5xl font-semibold">87%</span>
-            <p className="mt-6 text-lg">
-              of users say their resume better highlights their skills and experience
+              Better highlights skills and experience
             </p>
           </div>
         </div>

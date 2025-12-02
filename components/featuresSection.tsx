@@ -8,36 +8,23 @@ const features = [
     title: "Instantly Optimize Your Resume",
     details:
       "Our AI scans your resume and provides tailored suggestions to enhance clarity and impact. Highlight your strengths with precise, professional wording.",
-    tutorialLink: "#",
-  },
-  {
-    category: "Template Customization",
-    title: "Craft Resumes with Ease",
-    details:
-      "Choose from professional templates and customize them effortlessly. Our AI guides you to create job-specific resumes that stand out to recruiters.",
-    tutorialLink: "#",
+    image: "/structure.png",
   },
   {
     category: "Skill Enhancement",
     title: "Showcase Your Best Skills",
     details:
       "Identify and emphasize key skills with AI-driven insights. Automatically rephrase and organize your experience to align with job requirements.",
-    tutorialLink: "#",
+    image: "/skills.png",
   },
   {
     category: "Job Match Optimization",
     title: "Tailor for Your Dream Job",
     details:
       "Align your resume with job descriptions using AI-powered keyword optimization. Increase your chances of passing applicant tracking systems (ATS).",
-    tutorialLink: "#",
+    image: "/tone.png",
   },
-  {
-    category: "Feedback Integration",
-    title: "Refine with Real-Time Feedback",
-    details:
-      "Get instant feedback on your resume’s structure and content. Collaborate with our AI to refine sections and ensure a polished, professional output.",
-    tutorialLink: "#",
-  },
+
 ];
 
 const Features = () => {
@@ -56,7 +43,9 @@ const Features = () => {
               key={feature.category}
               className="flex flex-col md:flex-row items-center gap-x-12 gap-y-6 md:even:flex-row-reverse"
             >
-              <div className="w-full aspect-[4/3] bg-muted rounded-xl border border-border/50 basis-1/2" />
+              <div className="w-full aspect-[5/3] bg-muted rounded-xl border border-border/50 basis-1/2" >
+              <img src={feature.image} className="h-full px-3 py-8"/>
+              </div>
               <div className="basis-1/2 shrink-0">
                 <span className="uppercase font-medium text-sm text-gray-50">
                   {feature.category}

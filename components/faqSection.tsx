@@ -7,31 +7,32 @@ import {
 
 const faq = [
   {
-    question: "What is your return policy?",
+    question: "How does the resume analysis work?",
     answer:
-      "You can return unused items in their original packaging within 30 days for a refund or exchange. Contact support for assistance.",
+      "Your PDF is scanned with AI and ATS-style parsing to detect weak areas, missing keywords, formatting issues, and clarity problems. You immediately receive a breakdown and improvement suggestions.",
   },
   {
-    question: "How do I track my order?",
+    question: "Is my resume data stored or shared?",
     answer:
-      "Track your order using the link provided in your confirmation email, or log into your account to view tracking details.",
+      "Your resume is processed securely and only used to generate your results. We don’t sell, share, or permanently store your content.",
   },
   {
-    question: "Do you ship internationally?",
+    question: "Does this improve my ATS score?",
     answer:
-      "Yes, we ship worldwide. Shipping fees and delivery times vary by location, and customs duties may apply for some countries.",
+      "Yes. The system analyses sections, formatting, and relevant job-specific keywords to increase your chances of passing ATS filters.",
   },
   {
-    question: "What payment methods do you accept?",
+    question: "Can I upload multiple resumes?",
     answer:
-      "We accept Visa, MasterCard, American Express, PayPal, Apple Pay, and Google Pay, ensuring secure payment options for all customers.",
+      "Absolutely. You can upload and analyze as many resumes as you like for different job positions.",
   },
   {
-    question: "What if I receive a damaged item?",
+    question: "What file types do you support?",
     answer:
-      "Please contact our support team within 48 hours of delivery with photos of the damaged item. We’ll arrange a replacement or refund.",
+      "We currently support PDF uploads, which ensures consistent formatting across different devices and ATS systems.",
   },
 ];
+
 
 const FAQ = () => {
   return (
