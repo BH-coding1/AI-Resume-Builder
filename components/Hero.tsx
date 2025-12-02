@@ -69,13 +69,7 @@ const Hero = ({
           <a href={button.url}><ArrowUpFromLine /> {button.text}</a>
         </Button>
       </div>
-      <div className="mt-30 flex flex-col px-5 ">
-        <img
-          src={imageSrc}
-          alt={imageAlt}
-          className="mx-auto border-2 border-purple-300 h-full max-h-[480px] w-full max-w-5xl rounded-2xl object-cover"
-        />
-      </div>
+      
     </section>
   );
 };
