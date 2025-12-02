@@ -1,4 +1,4 @@
-// app/api/webhooks/analysis/route.ts
+
 import { NextResponse } from "next/server";
 
 const WEBHOOK_URL = process.env.BACKEND_WEBHOOK!;
