@@ -75,8 +75,8 @@ const Homepage = () => {
 
   return (
     <Protect fallback={<RedirectToSignIn />}>
-      <div className="text-center">
-        <h1 className="text-6xl font-extrabold tracking-tight bg-gray-900 text-transparent bg-clip-text">
+      <div className="text-center py-30">
+        <h1 className="text-6xl font-extrabold tracking-tight  text-transparent bg-clip-text">
           Analysed résumés homepage
         </h1>
         <p className="mt-5 text-lg sm:text-xl text-gray-500 text-base">
