@@ -1,4 +1,4 @@
-// app/api/webhooks/analysis/route.ts
+
 import { NextResponse } from "next/server";
 
 const WEBHOOK_URL = process.env.BACKEND_WEBHOOK!;
@@ -7,43 +7,33 @@ export async function POST(req: Request) {
   try {
     const formData = await req.formData();
 
-    const resumeText = (formData.get("resumeText") as string) || "";
-    const companyName = (formData.get("companyName") as string) || "";
-    const jobTitle = (formData.get("jobTitle") as string) || "";
-    const description = (formData.get("description") as string) || "";
+    
 
-
-
-    const payload = {
-      resumeText,
-      companyName,
-      jobTitle,
-      description,
-      
-    };
-
-    console.log("Sending to n8n:", payload); 
+    // FORWARD THE EXACT SAME FormData TO n8n
+    const forwardFormData = new FormData();
+    forwardFormData.append("resumeText",formData.get("resumeText") as string);
+    forwardFormData.append("companyName", formData.get("companyName") as string);
+    forwardFormData.append("jobTitle", formData.get("jobTitle") as string);
+    forwardFormData.append("description", formData.get("description") as string);
+    
+    console.log('data being sent to api',forwardFormData)
+    
 
     const response = await fetch(WEBHOOK_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
+      body: forwardFormData, 
     });
 
     if (!response.ok) {
       const text = await response.text();
-      console.error("n8n rejected:", response.status, text);
-      throw new Error(`n8n error: ${response.status}`);
+      console.error("n8n error:", text);
+      throw new Error("n8n failed");
     }
 
     const result = await response.json();
     return NextResponse.json({ success: true, result });
   } catch (error: any) {
-    console.error("Webhook failed:", error);
+    console.error("Error:", error);
     return NextResponse.json({ error: "Failed" }, { status: 500 });
   }
 }
-
-export const dynamic = "force-dynamic";
