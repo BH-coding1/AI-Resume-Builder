@@ -6,11 +6,8 @@ const WEBHOOK_URL = process.env.BACKEND_WEBHOOK!;
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
-    const file = formData.get("file") as File;
 
-    if (!file) {
-      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
-    }
+    
 
     // FORWARD THE EXACT SAME FormData TO n8n
     const forwardFormData = new FormData();
@@ -19,12 +16,12 @@ export async function POST(req: Request) {
     forwardFormData.append("jobTitle", formData.get("jobTitle") as string);
     forwardFormData.append("description", formData.get("description") as string);
     
-    console.log('data being sent to api',forwardFormData)
+    
     
 
     const response = await fetch(WEBHOOK_URL, {
       method: "POST",
-      body: forwardFormData, 
+      body: formData, 
     });
 
     if (!response.ok) {
