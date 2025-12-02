@@ -87,7 +87,7 @@ export default function ResumeCard({
 
       {/* Thumbnail */}
       <CardContent className="px-4 pb-0 pt-2">
-        <div className="aspect-[1/0.7] w-full overflow-hidden  border border-gray-300 ">
+        <div className="aspect-[1/0.7] w-full overflow-hidden  border border-purple-600 ">
           <PdfThumbnail pdfUrl={imageUrl} />
         </div>
       </CardContent>
