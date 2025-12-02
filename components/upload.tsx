@@ -112,7 +112,7 @@ const UploadForm = () => {
       }
 
       const result = await apiResponse.json();
-      console.log("content", result.result[0].message.content);
+      // console.log("content", result.result[0].message.content);
       console.log("API response:", result);
 
       setStatusText("Analyzing the resume...");

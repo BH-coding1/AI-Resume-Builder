@@ -11,17 +11,17 @@ export async function POST(req: Request) {
 
     // FORWARD THE EXACT SAME FormData TO n8n
     const forwardFormData = new FormData();
-    forwardFormData.append("resumeText ",formData.get("resumeText") as string);
+    forwardFormData.append("resumeText",formData.get("resumeText") as string);
     forwardFormData.append("companyName", formData.get("companyName") as string);
     forwardFormData.append("jobTitle", formData.get("jobTitle") as string);
     forwardFormData.append("description", formData.get("description") as string);
     
-    
+    console.log('data being sent to api',forwardFormData)
     
 
     const response = await fetch(WEBHOOK_URL, {
       method: "POST",
-      body: formData, 
+      body: forwardFormData, 
     });
 
     if (!response.ok) {
