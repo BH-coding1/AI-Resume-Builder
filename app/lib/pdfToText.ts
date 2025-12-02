@@ -1,9 +1,8 @@
-// then now whats left is to change the background of the pages 
 // then next is the screenshots , then ready for deployment  
 // then after that launch on twitter then we are off to learning cursor , also post on twitter about that
 // dont forget to delete every text from each file in the project folder as well . 
 // keep commenting on twitter , this is the time where i must go absoluteluy crazy
-// icon for the app
+
 
 export interface PdfTextResult {
   text: string;

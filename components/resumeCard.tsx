@@ -56,7 +56,7 @@ export default function ResumeCard({
 
   return (
     <Card
-      className="group overflow-hidden  rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:border-gray-300 cursor-pointer"
+      className="group overflow-hidden  rounded-2xl border-2 border-purple-300 bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:border-purple-600 cursor-pointer"
       onClick={onClick}
     >
       {/* Header */}
@@ -87,7 +87,7 @@ export default function ResumeCard({
 
       {/* Thumbnail */}
       <CardContent className="px-4 pb-0 pt-2">
-        <div className="aspect-[1/0.7] w-full overflow-hidden  border border-purple-600 ">
+        <div className="aspect-[1/0.7] w-full overflow-hidden  border-2 border-purple-300 ">
           <PdfThumbnail pdfUrl={imageUrl} />
         </div>
       </CardContent>

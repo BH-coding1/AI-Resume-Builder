@@ -75,16 +75,18 @@ const Homepage = () => {
 
   return (
     <Protect fallback={<RedirectToSignIn />}>
-      <div className="text-center py-30">
-        <h1 className="text-6xl font-extrabold tracking-tight  text-transparent bg-clip-text">
-          Analysed résumés homepage
-        </h1>
-        <p className="mt-5 text-lg sm:text-xl text-gray-500 text-base">
-          Click and view your résumé to view the analysis and personalized tips
-        </p>
-      </div>
-      <div className="py-30 bg-gray-50 min-h-screen bg-gradient-patches px-10">
+      <div className="py-5 bg-gray-50 min-h-screen bg-gradient-patches px-10"> 
+        <div className="text-center py-30">
+            <h1 className="text-6xl font-extrabold tracking-tight bg-gray-900 text-transparent bg-clip-text">
+              Analysed résumés
+            </h1>
+            <p className="mt-5 text-lg sm:text-xl text-gray-500 text-base">
+              Click and view your résumé to view the analysis and personalized
+              tips
+            </p>
+          </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+         
           {loading ? (
             <div className="col-span-full text-center py-10">
               <p className="text-gray-600">Loading your resumes...</p>
