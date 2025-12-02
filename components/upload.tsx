@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { InputGroupTextarea } from "@/components/ui/input-group";
 import FileUploaderButton from "./fileUploaderButton";
 
-// NEW — only this import added
+
 import { convertPdfToText } from "@/app/lib/pdfToText";
 
 const formSchema = z.object({
@@ -86,11 +86,11 @@ const UploadForm = () => {
 
       const { pdfUrl } = await uploadRes.json();
 
-      // NEW — Extract text from PDF (client-side)
+     
       setStatusText("Extracting text from your resume...");
       const textResult = await convertPdfToText(file);
       if (textResult.error) throw new Error(textResult.error);
-       
+      console.log('text:',textResult.text) 
 
       // Prepare the form data to send to the backend API webhook for the ai 
       const formData = new FormData();
@@ -98,9 +98,9 @@ const UploadForm = () => {
       formData.append("jobTitle", jobTitle);
       formData.append("description", description);
       formData.append("file", file);
-      formData.append("resumeText", textResult.text); // THIS IS THE ONLY NEW LINE
+      formData.append("resumeText", textResult.text);
 
-      console.log(formData);
+      console.log('formdata', formData.get('resumeText'));
       // Send the data to the backend API webhook for the ai 
       const apiResponse = await fetch("/api/webhooks/analysis", {
         method: "POST",
@@ -152,7 +152,7 @@ const UploadForm = () => {
         },
         tone_analysis: result.result[0].message.content.tone_analysis || [],
         structure_analysis: result.result[0].message.content.structure_analysis || [],
-        skills_match_analysis: result.result[0].message.content.skillsMatch_analysis || [],
+        skills_match_analysis: result.result[0].message.content.skills_match_analysis || [],
         resume_analysis: result.result[0].message.content.resume_analysis || [],
         optimization_suggestions:
           result.result[0].message.content.optimization_suggestions || [],

@@ -19,6 +19,7 @@ export async function POST(req: Request) {
     forwardFormData.append("jobTitle", formData.get("jobTitle") as string);
     forwardFormData.append("description", formData.get("description") as string);
     
+    console.log('data being sent to api',forwardFormData)
     
 
     const response = await fetch(WEBHOOK_URL, {
